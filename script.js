@@ -70,7 +70,7 @@ document.getElementById('signup').addEventListener('submit', function(e) {
   const minecraftUsername = document.getElementById('minecraftUsername').value;
   
   // Basic validation
-  if (username.length < 3) {
+  if (username.length < 4) {
     showMessage('USERNAME TOO SHORT!', 'error');
     return;
   }
