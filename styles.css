@@ -1,1 +1,242 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
+body {
+  font-family: 'Press Start 2P', cursive;
+  background: linear-gradient(45deg, #4a90e2, #87ceeb);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.minecraft-bg {
+  width: 100%;
+  min-height: 100vh;
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(0,0,0,0.1) 0px,
+      rgba(0,0,0,0.1) 1px,
+      transparent 1px,
+      transparent 16px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(0,0,0,0.1) 0px,
+      rgba(0,0,0,0.1) 1px,
+      transparent 1px,
+      transparent 16px
+    );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.container {
+  max-width: 400px;
+  width: 100%;
+}
+
+.form-container {
+  background: #8B4513;
+  border: 4px solid #654321;
+  border-radius: 0;
+  padding: 30px;
+  box-shadow: 
+    4px 4px 0px #654321,
+    8px 8px 0px #543221;
+  position: relative;
+}
+
+.form-container::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  background: #654321;
+  z-index: -1;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.minecraft-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.grass-block {
+  width: 48px;
+  height: 48px;
+  background: #7CB342;
+  border: 2px solid #558B2F;
+  position: relative;
+}
+
+.grass-block::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background: #8BC34A;
+  border-bottom: 1px solid #689F38;
+}
+
+.grass-block::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 70%;
+  background: #6D4C41;
+}
+
+h1 {
+  color: #2E7D32;
+  font-size: 16px;
+  text-shadow: 2px 2px 0px #1B5E20;
+}
+
+.form {
+  display: none;
+}
+
+.form.active {
+  display: block;
+}
+
+h2 {
+  color: #FFF;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 25px;
+  text-shadow: 2px 2px 0px #333;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  color: #FFF;
+  font-size: 10px;
+  margin-bottom: 8px;
+  text-shadow: 1px 1px 0px #333;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border: 3px solid #555;
+  background: #E0E0E0;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 8px;
+  color: #333;
+  outline: none;
+  border-radius: 0;
+}
+
+input:focus {
+  border-color: #4CAF50;
+  background: #F1F8E9;
+}
+
+.minecraft-btn {
+  width: 100%;
+  padding: 15px;
+  background: #4CAF50;
+  color: white;
+  border: 3px solid #388E3C;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  cursor: pointer;
+  text-shadow: 1px 1px 0px #2E7D32;
+  transition: all 0.1s ease;
+  border-radius: 0;
+}
+
+.minecraft-btn:hover {
+  background: #66BB6A;
+  border-color: #4CAF50;
+  transform: translateY(-1px);
+}
+
+.minecraft-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 0px #2E7D32;
+}
+
+.switch-form {
+  text-align: center;
+  color: #FFF;
+  font-size: 8px;
+  margin-top: 20px;
+  text-shadow: 1px 1px 0px #333;
+}
+
+.switch-form span {
+  color: #81C784;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.switch-form span:hover {
+  color: #A5D6A7;
+}
+
+.message {
+  margin-top: 15px;
+  padding: 10px;
+  border: 2px solid;
+  font-size: 8px;
+  text-align: center;
+  display: none;
+}
+
+.message.success {
+  background: #C8E6C9;
+  color: #2E7D32;
+  border-color: #4CAF50;
+}
+
+.message.error {
+  background: #FFCDD2;
+  color: #C62828;
+  border-color: #F44336;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .form-container {
+    padding: 20px;
+    margin: 10px;
+  }
+  
+  h1 {
+    font-size: 12px;
+  }
+  
+  h2 {
+    font-size: 12px;
+  }
+  
+  .grass-block {
+    width: 40px;
+    height: 40px;
+  }
+}
