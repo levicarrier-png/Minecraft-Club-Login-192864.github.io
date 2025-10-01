@@ -1,4 +1,5 @@
-// Form switching functionality
+const SITE_REDIRECT = "https://sites.google.com/windhamacademy.org/minecraft-club-wa-2025/home";
+
 function switchToSignup() {
   document.getElementById('loginForm').classList.remove('active');
   document.getElementById('signupForm').classList.add('active');
@@ -11,7 +12,6 @@ function switchToLogin() {
   hideMessage();
 }
 
-// Message display functionality
 function showMessage(text, type) {
   const messageDiv = document.getElementById('message');
   messageDiv.textContent = text;
@@ -24,106 +24,98 @@ function hideMessage() {
   messageDiv.style.display = 'none';
 }
 
-// Form validation and submission
+// LocalStorage helpers
+function getLoginsData() {
+  const raw = localStorage.getItem('minecraftClub_logins');
+  if (!raw) return [];
+  try {
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveLoginsData(arr) {
+  localStorage.setItem('minecraftClub_logins', JSON.stringify(arr));
+}
+
+function logAuditEvent(event, username = '', minecraftUsername = '', email = '') {
+  const audit = JSON.parse(localStorage.getItem('minecraftClub_audit') || '[]');
+  audit.push({
+    timestamp: new Date().toISOString(),
+    event: event,
+    username: username,
+    minecraftUsername: minecraftUsername,
+    email: email
+  });
+  localStorage.setItem('minecraftClub_audit', JSON.stringify(audit));
+}
+
+// Login flow
 document.getElementById('login').addEventListener('submit', function(e) {
   e.preventDefault();
-  
-  const username = document.getElementById('loginUsername').value;
+  const username = document.getElementById('loginUsername').value.trim();
+  const minecraftUsername = document.getElementById('loginMinecraftUsername').value.trim();
   const password = document.getElementById('loginPassword').value;
-  
-  // Basic validation
-  if (username.length < 3) {
-    showMessage('USERNAME TOO SHORT!', 'error');
+
+  if (username.length < 3 || minecraftUsername.length < 3 || password.length < 6) {
+    showMessage('Please enter valid credentials.', 'error');
     return;
   }
-  
-  if (password.length < 6) {
-    showMessage('PASSWORD TOO SHORT!', 'error');
-    return;
-  }
-  
-  // Simulate login (you'll replace this with real authentication)
-  const savedUser = localStorage.getItem('minecraftClub_' + username);
-  if (savedUser) {
-    const userData = JSON.parse(savedUser);
-    if (userData.password === password) {
-      showMessage('WELCOME BACK TO THE CLUB!', 'success');
-      // Redirect or perform login actions here
-      setTimeout(() => {
-        // You can redirect to your main club page here
-        alert('Login successful! Welcome to Minecraft Club!');
-      }, 1000);
-    } else {
-      showMessage('WRONG PASSWORD!', 'error');
-    }
+
+  const logins = getLoginsData();
+  const found = logins.find(u => u.username === username && u.minecraftUsername === minecraftUsername && u.password === password);
+
+  if (found) {
+    logAuditEvent('LOGIN_SUCCESS', username, minecraftUsername, found.email);
+    showMessage('Login successful! Redirecting...', 'success');
+    setTimeout(() => { window.location.href = SITE_REDIRECT; }, 800);
   } else {
-    showMessage('USER NOT FOUND! PLEASE SIGN UP.', 'error');
+    logAuditEvent('LOGIN_FAILED', username, minecraftUsername);
+    showMessage('Invalid credentials. Please signup or try again.', 'error');
   }
 });
 
+// Signup flow
 document.getElementById('signup').addEventListener('submit', function(e) {
   e.preventDefault();
-  
-  const username = document.getElementById('signupUsername').value;
-  const email = document.getElementById('signupEmail').value;
+  const username = document.getElementById('signupUsername').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
   const password = document.getElementById('signupPassword').value;
-  const minecraftUsername = document.getElementById('minecraftUsername').value;
-  
-  // Basic validation
-  if (username.length < 4) {
-    showMessage('USERNAME TOO SHORT!', 'error');
+  const minecraftUsername = document.getElementById('minecraftUsernameSignup').value.trim();
+
+  if (username.length < 3 || password.length < 6 || !email.includes('@') || minecraftUsername.length < 3) {
+    showMessage('Please fill in all fields correctly.', 'error');
     return;
   }
-  
-  if (password.length < 6) {
-    showMessage('PASSWORD TOO SHORT!', 'error');
-    return;
-  }
-  
-  if (!email.includes('@')) {
-    showMessage('INVALID EMAIL ADDRESS!', 'error');
-    return;
-  }
-  
-  if (minecraftUsername.length < 3) {
-    showMessage('MINECRAFT USERNAME TOO SHORT!', 'error');
-    return;
-  }
-  
-  // Check if user already exists
-  if (localStorage.getItem('minecraftClub_' + username)) {
+
+  const logins = getLoginsData();
+  const exists = logins.find(u => u.username === username);
+  if (exists) {
     showMessage('USERNAME ALREADY TAKEN!', 'error');
     return;
   }
-  
-  // Save user data (you'll replace this with real database storage)
-  const userData = {
+
+  const newUser = {
     username: username,
     email: email,
     password: password,
     minecraftUsername: minecraftUsername,
     joinDate: new Date().toISOString()
   };
-  
-  localStorage.setItem('minecraftClub_' + username, JSON.stringify(userData));
-  
-  showMessage('WELCOME TO MINECRAFT CLUB!', 'success');
-  
-  // Switch to login form after successful signup
+
+  logins.push(newUser);
+  saveLoginsData(logins);
+  logAuditEvent('SIGNUP_SUCCESS', username, minecraftUsername, email);
+
+  showMessage('Signup successful! Redirecting to the club page...', 'success');
   setTimeout(() => {
-    switchToLogin();
-    document.getElementById('loginUsername').value = username;
-    showMessage('NOW LOGIN WITH YOUR NEW ACCOUNT!', 'success');
-  }, 1500);
+    window.location.href = SITE_REDIRECT;
+  }, 900);
 });
 
-// Add some fun Minecraft sound effects (optional)
+// Initial DOM setup
 document.addEventListener('DOMContentLoaded', function() {
-  // Add click sound to buttons
-  document.querySelectorAll('.minecraft-btn').forEach(button => {
-    button.addEventListener('click', function() {
-      // You can add actual Minecraft sound files here if desired
-      console.log('*Minecraft button click sound*');
-    });
-  });
+  document.getElementById('loginForm').classList.add('active');
 });
