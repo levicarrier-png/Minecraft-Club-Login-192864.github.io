@@ -1,6 +1,7 @@
-{
-  "name": "minecraft-club-login",
+{  
+  "name": "minecraft-club-auth",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "dev": "http-server -p 3000 -c-1 --cors -a localhost"
   },
