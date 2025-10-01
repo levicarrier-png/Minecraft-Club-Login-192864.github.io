@@ -9,13 +9,27 @@
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } 
       from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
 
-    // 🔑 REPLACE WITH YOUR FIREBASE CONFIG
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      appId: "YOUR_APP_ID"
-    };
+    // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyD57wIvnEbv-bIzIdqWo8Bmc1_xdEqAitI",
+  authDomain: "wa-minecraft-club-987ae.firebaseapp.com",
+  projectId: "wa-minecraft-club-987ae",
+  storageBucket: "wa-minecraft-club-987ae.firebasestorage.app",
+  messagingSenderId: "24488864623",
+  appId: "1:24488864623:web:0be2e156132601aaaa169a",
+  measurementId: "G-6GKHMR6SPR"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
